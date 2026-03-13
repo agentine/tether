@@ -35,7 +35,7 @@ def interact(
     """
     escape_byte = escape_character.encode(spawn.encoding)
     stdin_fd = sys.stdin.fileno()
-    pty_fd = spawn._proc.fd
+    pty_fd = spawn.proc.fd
     stdout_fd = sys.stdout.fileno()
 
     old_settings = termios.tcgetattr(stdin_fd)
@@ -49,10 +49,10 @@ def interact(
                     break
                 if input_filter is not None:
                     data = input_filter(data)
-                spawn._proc.write(data)
+                spawn.proc.write(data)
             if pty_fd in r:
                 try:
-                    data = spawn._proc.read(1024)
+                    data = spawn.proc.read(1024)
                     if data:
                         if output_filter is not None:
                             data = output_filter(data)

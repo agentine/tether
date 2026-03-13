@@ -71,8 +71,8 @@ def run(
         try:
             if child.isalive():
                 child.close(force=False)
-            child._proc.waitpid()
-            exitstatus = child._proc._exitstatus or 0
+            child.proc.waitpid()
+            exitstatus = child.proc.exitstatus or 0
         except Exception:
             pass
 

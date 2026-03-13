@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 from tether._errors import ExitStatus
 from tether._expect import compile_pattern, compile_patterns, expect_loop
 from tether._pty import PtyProcess
-from tether._types import CompiledPattern, Pattern
+from tether._types import Pattern
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -67,6 +67,11 @@ class Spawn:
         self._buffer: deque[str] = deque()
         self._last_sendline: str | None = None  # For echo stripping (#821)
         self._closed = False
+
+    @property
+    def proc(self) -> PtyProcess:
+        """The underlying PtyProcess."""
+        return self._proc
 
     # ---- Context manager ----
 
@@ -228,7 +233,7 @@ class Spawn:
     def readline(self) -> str:
         """Read a single line from process output."""
         compiled = [compile_pattern("\r\n"), compile_pattern("\n")]
-        idx, before, after, _ = expect_loop(
+        _, before, after, _match = expect_loop(
             self._proc.fd,
             self._buffer,
             compiled,
@@ -245,13 +250,13 @@ class Spawn:
 
     def wait(self) -> int:
         """Wait for the child to exit and return the exit code."""
-        _, status = self._proc.waitpid()
-        if self._proc._exitstatus is not None and self._proc._exitstatus != 0:
+        self._proc.waitpid()
+        if self._proc.exitstatus is not None and self._proc.exitstatus != 0:
             raise ExitStatus(
-                self._proc._exitstatus,
-                signal=self._proc._signalstatus,
+                self._proc.exitstatus,
+                signal=self._proc.signalstatus,
             )
-        return self._proc._exitstatus or 0
+        return self._proc.exitstatus or 0
 
     def close(self, force: bool = True) -> None:
         """Close the child process and PTY."""

@@ -19,6 +19,8 @@ __all__ = [
     "Timeout",
     "ExitStatus",
     "Pattern",
+    "strip_ansi",
+    "has_ansi",
 ]
 
 # Foundational types

@@ -210,18 +210,15 @@ class AsyncSpawn:
 
     async def wait(self) -> int:
         """Wait for the child to exit and return the exit code."""
-        loop = asyncio.get_running_loop()
-        # Poll in a non-blocking way until the process exits.
         while self._proc.isalive():
             await asyncio.sleep(0.05)
-        _, status = self._proc.waitpid()
-        _ = status  # already decoded by isalive check
-        if self._proc._exitstatus is not None and self._proc._exitstatus != 0:
+        self._proc.waitpid()
+        if self._proc.exitstatus is not None and self._proc.exitstatus != 0:
             raise ExitStatus(
-                self._proc._exitstatus,
-                signal=self._proc._signalstatus,
+                self._proc.exitstatus,
+                signal=self._proc.signalstatus,
             )
-        return self._proc._exitstatus or 0
+        return self._proc.exitstatus or 0
 
     async def close(self, force: bool = True) -> None:
         """Close the child process and PTY."""

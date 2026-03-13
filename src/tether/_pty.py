@@ -194,6 +194,16 @@ class PtyProcess:
         self._decode_status(status)
         return False
 
+    @property
+    def exitstatus(self) -> int | None:
+        """Exit status of the child, or None if still running."""
+        return self._exitstatus
+
+    @property
+    def signalstatus(self) -> int | None:
+        """Signal that killed the child, or None."""
+        return self._signalstatus
+
     def fileno(self) -> int:
         """Return the master PTY file descriptor."""
         return self.fd
