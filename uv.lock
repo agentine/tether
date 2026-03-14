@@ -302,6 +302,7 @@ source = { editable = "." }
 [package.optional-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "pexpect" },
     { name = "pyright" },
     { name = "pytest" },
     { name = "ruff" },
@@ -309,12 +310,17 @@ dev = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "mypy" },
     { name = "pexpect" },
+    { name = "pyright" },
+    { name = "pytest" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.8" },
+    { name = "pexpect", marker = "extra == 'dev'", specifier = ">=4.9.0" },
     { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.3" },
@@ -322,7 +328,13 @@ requires-dist = [
 provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pexpect", specifier = ">=4.9.0" }]
+dev = [
+    { name = "mypy", specifier = ">=1.8" },
+    { name = "pexpect", specifier = ">=4.9.0" },
+    { name = "pyright", specifier = ">=1.1" },
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "ruff", specifier = ">=0.3" },
+]
 
 [[package]]
 name = "tomli"

@@ -35,7 +35,7 @@ Issues = "https://github.com/agentine/tether/issues"
 packages = ["src/tether"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "mypy>=1.8", "pyright>=1.1", "ruff>=0.3"]
+dev = ["pytest>=8.0", "mypy>=1.8", "pyright>=1.1", "ruff>=0.3", "pexpect>=4.9.0"]
 
 [tool.mypy]
 strict = true
@@ -54,5 +54,9 @@ testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
+    "pytest>=8.0",
+    "mypy>=1.8",
+    "pyright>=1.1",
+    "ruff>=0.3",
     "pexpect>=4.9.0",
 ]
