@@ -6,7 +6,7 @@ import re
 import select
 import time
 from collections import deque
-from typing import Callable
+from collections.abc import Callable
 
 from tether._errors import EOF as EOFExc
 from tether._errors import Timeout as TimeoutExc
@@ -76,7 +76,7 @@ def expect_loop(
         result = _search_patterns(incoming, patterns)
         if result is not None:
             idx, before, after, match_obj = result
-            remainder = incoming[len(before) + len(after):]
+            remainder = incoming[len(before) + len(after) :]
             if remainder:
                 buffer.append(remainder)
             return (idx, before, after, match_obj)

@@ -48,6 +48,23 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]
+ignore = [
+    "N811",   # EOF/Timeout imported as EOFError/TimeoutError (pexpect compat)
+    "N813",   # camelcase imported as lowercase (pexpect compat aliases)
+    "N814",   # camelcase imported as constant
+    "A004",   # builtin shadowing (EOFError alias is intentional)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["SIM105", "SIM108", "SIM117", "B904"]  # test clarity over style
+"src/tether/_errors.py" = ["N818"]  # EOF/Timeout are not suffixed with Error (pexpect compat)
+"src/tether/__init__.py" = ["N801"]  # re-exports with pexpect-compat names
+"src/tether/_types.py" = ["N801", "E501"]  # EOF_TYPE/TIMEOUT_TYPE naming is intentional
+"src/tether/_pty.py" = ["SIM105"]  # try/except/pass for OS cleanup is clearer
+"src/tether/_popen.py" = ["SIM105", "SIM108"]  # try/except/pass for cleanup, if/else for clarity
+"src/tether/_spawn.py" = ["SIM108"]  # if/else for clarity
+"src/tether/_async.py" = ["SIM108"]  # if/else for clarity
+"src/tether/_ssh.py" = ["SIM105"]  # try/except/pass for cleanup
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -61,7 +61,9 @@ TIMEOUT: TIMEOUT_TYPE = TIMEOUT_TYPE()
 
 # Pattern type accepted by expect methods.
 # Includes both sentinel types and exception classes for compat support.
-Pattern = Union[str, re.Pattern[str], type[EOF_TYPE], type[TIMEOUT_TYPE], "type[EOFExc]", "type[TimeoutExc]"]
+Pattern = Union[
+    str, re.Pattern[str], type[EOF_TYPE], type[TIMEOUT_TYPE], "type[EOFExc]", "type[TimeoutExc]"
+]
 
 
 @dataclass(frozen=True, slots=True)

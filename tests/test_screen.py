@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from tether._screen import ANSI_ESCAPE_RE, has_ansi, strip_ansi
+from tether._screen import has_ansi, strip_ansi
 
 
 class TestStripAnsi:

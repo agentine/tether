@@ -60,4 +60,5 @@ class TestInteractModule:
     def test_interact_import(self) -> None:
         """interact function should be importable."""
         from tether._interact import interact
+
         assert callable(interact)

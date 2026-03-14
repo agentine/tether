@@ -24,23 +24,20 @@ __all__ = [
 ]
 
 # Foundational types
+# Phase 3 — async, popen, ssh
+from tether._async import AsyncSpawn
 from tether._errors import EOF as EOFError
 from tether._errors import ExitStatus, TetherError, Timeout
-from tether._types import EOF, TIMEOUT, EOF_TYPE, TIMEOUT_TYPE, Pattern
-
-# Phase 1 — Spawn
-from tether._spawn import Spawn
-
+from tether._popen import PopenSpawn
 
 # Phase 2 — run, screen, interact
 from tether._run import run
 from tether._screen import has_ansi, strip_ansi
 
-
-# Phase 3 — async, popen, ssh
-from tether._async import AsyncSpawn
-from tether._popen import PopenSpawn
+# Phase 1 — Spawn
+from tether._spawn import Spawn
 from tether._ssh import SSHSession
+from tether._types import EOF, EOF_TYPE, TIMEOUT, TIMEOUT_TYPE, Pattern
 
 
 def spawn(

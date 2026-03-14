@@ -7,7 +7,8 @@ import select
 import sys
 import termios
 import tty
-from typing import Callable, TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from tether._spawn import Spawn

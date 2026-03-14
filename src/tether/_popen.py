@@ -221,7 +221,7 @@ class PopenSpawn:
             result = self._search_patterns(incoming, patterns)
             if result is not None:
                 idx, before, after, match_obj = result
-                remainder = incoming[len(before) + len(after):]
+                remainder = incoming[len(before) + len(after) :]
                 if remainder:
                     self._buffer.append(remainder)
                 return (idx, before, after, match_obj)

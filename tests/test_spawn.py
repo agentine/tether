@@ -7,6 +7,7 @@ import re
 import time
 
 import pytest
+
 import tether
 from tether import EOF_TYPE, TIMEOUT_TYPE, Spawn
 from tether._errors import EOF as EOFExc
@@ -65,9 +66,8 @@ class TestSpawnTimeout:
     """Test 4: spawn("sleep 10"), expect("x", timeout=0.1) → raises Timeout."""
 
     def test_timeout_raises(self) -> None:
-        with Spawn("sleep 10", timeout=5) as child:
-            with pytest.raises(TimeoutExc):
-                child.expect("will_never_match", timeout=0.2)
+        with Spawn("sleep 10", timeout=5) as child, pytest.raises(TimeoutExc):
+            child.expect("will_never_match", timeout=0.2)
 
     def test_timeout_sentinel(self) -> None:
         with Spawn("sleep 10", timeout=5) as child:

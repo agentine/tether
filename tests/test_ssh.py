@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import re
-
 import pytest
 
 from tether._ssh import SSHSession

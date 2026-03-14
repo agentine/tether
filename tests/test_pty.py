@@ -5,6 +5,7 @@ import select
 import time
 
 import pytest
+
 from tether._pty import PtyProcess
 
 

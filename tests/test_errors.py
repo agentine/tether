@@ -1,6 +1,7 @@
 """Tests for tether._errors — exception hierarchy."""
 
 import pytest
+
 from tether._errors import EOF, ExitStatus, TetherError, Timeout
 from tether._types import EOF_TYPE, TIMEOUT_TYPE
 

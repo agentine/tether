@@ -12,23 +12,23 @@ Example::
 
 from __future__ import annotations
 
-# Core classes — pexpect.spawn ↔ tether.Spawn
-from tether._spawn import Spawn as spawn  # noqa: N811 (pexpect names are lowercase)
-from tether._spawn import Spawn
-
-# High-level run — pexpect.run ↔ tether.run
-from tether._run import run
-
 # EOF / TIMEOUT — pexpect exports these as exception classes that also serve
 # as sentinels in expect() pattern lists.  Mapping to tether's exception
 # classes lets ``except pexpect.EOF:`` work correctly.
 from tether._errors import EOF as EOF  # noqa: PLC0414
-from tether._errors import Timeout as TIMEOUT  # noqa: PLC0414
 
 # Explicit exception aliases (pexpect compat names).
 from tether._errors import EOF as ExceptionEOF  # noqa: PLC0414
 from tether._errors import TetherError as ExceptionPexpect  # noqa: PLC0414
 from tether._errors import Timeout as ExceptionTimeout  # noqa: PLC0414
+from tether._errors import Timeout as TIMEOUT  # noqa: PLC0414
+
+# High-level run — pexpect.run ↔ tether.run
+from tether._run import run
+from tether._spawn import Spawn
+
+# Core classes — pexpect.spawn ↔ tether.Spawn
+from tether._spawn import Spawn as spawn  # noqa: N811 (pexpect names are lowercase)
 
 # SSH — pexpect.pxssh ↔ tether.SSHSession
 from tether._ssh import SSHSession as pxssh

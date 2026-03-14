@@ -4,6 +4,7 @@ import re
 from collections import deque
 
 import pytest
+
 from tether._errors import EOF as EOFExc
 from tether._errors import Timeout as TimeoutExc
 from tether._expect import (
@@ -11,7 +12,7 @@ from tether._expect import (
     compile_patterns,
     expect_loop,
 )
-from tether._types import EOF_TYPE, TIMEOUT_TYPE, CompiledPattern
+from tether._types import EOF_TYPE, TIMEOUT_TYPE
 
 
 class TestCompilePattern:
@@ -69,8 +70,8 @@ class TestExpectLoop:
     def _make_pipe_reader(data_chunks: list[str]) -> tuple[int, object]:
         """Create a pipe fd and a read function that yields chunks."""
         r_fd, w_fd = os.pipe()
-        import os as _os
         import fcntl as _fcntl
+        import os as _os
 
         # Set read end to non-blocking
         flags = _fcntl.fcntl(r_fd, _fcntl.F_GETFL)

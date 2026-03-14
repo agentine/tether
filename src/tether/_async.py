@@ -117,9 +117,7 @@ class AsyncSpawn:
         # Strip echoed sendline input.
         await self._strip_echo()
 
-        idx, before, after, match_obj = await self._async_expect_loop(
-            compiled, timeout
-        )
+        idx, before, after, match_obj = await self._async_expect_loop(compiled, timeout)
 
         self.before = before
         self.after = after
@@ -292,7 +290,7 @@ class AsyncSpawn:
             result = self._search_patterns(incoming, patterns)
             if result is not None:
                 idx, before, after, match_obj = result
-                remainder = incoming[len(before) + len(after):]
+                remainder = incoming[len(before) + len(after) :]
                 if remainder:
                     self._buffer.append(remainder)
                 return (idx, before, after, match_obj)
@@ -387,7 +385,7 @@ class AsyncSpawn:
             for echo in echo_patterns:
                 if buf_text.startswith(echo):
                     self._buffer.clear()
-                    remainder = buf_text[len(echo):]
+                    remainder = buf_text[len(echo) :]
                     if remainder:
                         self._buffer.append(remainder)
                     return

@@ -7,8 +7,8 @@ import re
 import select
 import shlex
 import sys
-import tty
 import termios
+import tty
 from collections import deque
 from typing import TYPE_CHECKING
 
@@ -335,6 +335,7 @@ class Spawn:
 
         # Wait briefly for the echo to arrive.
         import time
+
         deadline = time.monotonic() + 0.5
         while time.monotonic() < deadline:
             buf_text = "".join(self._buffer)
@@ -342,7 +343,7 @@ class Spawn:
             for echo in echo_patterns:
                 if buf_text.startswith(echo):
                     self._buffer.clear()
-                    remainder = buf_text[len(echo):]
+                    remainder = buf_text[len(echo) :]
                     if remainder:
                         self._buffer.append(remainder)
                     return
