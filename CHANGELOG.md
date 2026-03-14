@@ -1,8 +1,11 @@
 # Changelog
 
+> **Note:** This package was previously published as **tether**. It was renamed to **ptylink** after v0.1.0.
+> If you were using `tether`, update your dependency to `ptylink` and replace any `TetherError` references with `PtylinkError`.
+
 ## v0.1.0 (2026-03-13)
 
-Initial release — modern drop-in replacement for pexpect.
+Initial release as `tether` — modern drop-in replacement for pexpect. Renamed to `ptylink` post-release.
 
 ### Features
 

@@ -187,6 +187,29 @@ clean = strip_ansi("\x1b[31mred text\x1b[0m")  # "red text"
 has_ansi("\x1b[1mbold\x1b[0m")  # True
 ```
 
+## Migrating from tether
+
+This package was previously named **tether**. To upgrade:
+
+```bash
+pip uninstall tether
+pip install ptylink
+```
+
+Then update your imports and any exception references:
+
+```python
+# Before
+import tether
+from tether import TetherError
+
+# After
+import ptylink
+from ptylink import PtylinkError
+```
+
+All other APIs are identical.
+
 ## pexpect Migration Guide
 
 ### Zero-Change Migration
