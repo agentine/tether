@@ -73,8 +73,8 @@ def run(
                 child.close(force=False)
             child.proc.waitpid()
             exitstatus = child.proc.exitstatus or 0
-        except Exception:
-            pass
+        except (ChildProcessError, OSError):
+            exitstatus = child.proc.exitstatus or -1
 
     except Exception:
         output = "".join(output_parts)

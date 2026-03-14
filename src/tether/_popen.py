@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import os
 import re
+import select
 import shlex
 import subprocess
 import time
@@ -183,11 +185,22 @@ class PopenSpawn:
 
     # ---- Internal helpers ----
 
-    def _read(self) -> str:
-        """Read available data from stdout. Raises EOFError on EOF."""
+    def _read(self, timeout: float = 0) -> str:
+        """Read available data from stdout.
+
+        Uses ``select()`` so the call respects *timeout* instead of
+        blocking indefinitely when the child produces no output.
+
+        Returns an empty string when no data is available within *timeout*.
+        Raises ``EOFError`` when the child's stdout is closed.
+        """
         if self._eof or self._proc.stdout is None:
             raise EOFError
-        data = self._proc.stdout.read(4096)
+        fd = self._proc.stdout.fileno()
+        ready, _, _ = select.select([fd], [], [], timeout)
+        if not ready:
+            return ""
+        data = os.read(fd, 4096)
         if not data:
             self._eof = True
             raise EOFError
@@ -217,12 +230,16 @@ class PopenSpawn:
                 remaining = end_time - time.monotonic()
                 if remaining <= 0:
                     return self._on_timeout(incoming, patterns)
+            else:
+                remaining = 30.0
 
             try:
-                chunk = self._read()
+                chunk = self._read(timeout=min(remaining, 1.0))
                 if chunk:
                     incoming += chunk
                     continue
+                # No data within poll interval — loop back to re-check timeout.
+                continue
             except EOFError:
                 pass
 

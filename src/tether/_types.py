@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Union
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from tether._errors import EOF as EOFExc
+    from tether._errors import Timeout as TimeoutExc
 
 
 class EOF_TYPE:
@@ -56,7 +60,8 @@ EOF: EOF_TYPE = EOF_TYPE()
 TIMEOUT: TIMEOUT_TYPE = TIMEOUT_TYPE()
 
 # Pattern type accepted by expect methods.
-Pattern = Union[str, re.Pattern[str], type[EOF_TYPE], type[TIMEOUT_TYPE]]
+# Includes both sentinel types and exception classes for compat support.
+Pattern = Union[str, re.Pattern[str], type[EOF_TYPE], type[TIMEOUT_TYPE], "type[EOFExc]", "type[TimeoutExc]"]
 
 
 @dataclass(frozen=True, slots=True)

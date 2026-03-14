@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
+from tether._errors import EOF as EOFExc
+from tether._errors import Timeout as TimeoutExc
 from tether._spawn import Spawn
 
 if TYPE_CHECKING:
@@ -107,7 +109,7 @@ class SSHSession:
         try:
             self._spawn.expect(self._prompt_re, timeout=t)
             return True
-        except Exception:
+        except (TimeoutExc, EOFExc):
             return False
 
     def run(self, command: str, *, timeout: float = -1) -> str:

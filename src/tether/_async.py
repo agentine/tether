@@ -131,7 +131,8 @@ class AsyncSpawn:
     async def send(self, s: str) -> int:
         """Send string *s* to the process."""
         data = s.encode(self.encoding)
-        return self._proc.write(data)
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._proc.write, data)
 
     async def sendline(self, s: str = "") -> int:
         """Send string *s* followed by a newline."""
@@ -206,7 +207,8 @@ class AsyncSpawn:
 
     async def isalive(self) -> bool:
         """Return True if the child process is still running."""
-        return self._proc.isalive()
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._proc.isalive)
 
     async def wait(self) -> int:
         """Wait for the child to exit and return the exit code."""
@@ -230,11 +232,13 @@ class AsyncSpawn:
 
     async def terminate(self, force: bool = False) -> bool:
         """Terminate the child process."""
-        return self._proc.terminate(force=force)
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._proc.terminate, force)
 
     async def setwinsize(self, rows: int, cols: int) -> None:
         """Set the terminal window size."""
-        self._proc.setwinsize(rows, cols)
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, self._proc.setwinsize, rows, cols)
 
     # ---- Internal helpers ----
 
@@ -281,7 +285,7 @@ class AsyncSpawn:
         incoming = "".join(self._buffer)
         self._buffer.clear()
 
-        deadline = asyncio.get_event_loop().time() + timeout if timeout >= 0 else None
+        deadline = asyncio.get_running_loop().time() + timeout if timeout >= 0 else None
 
         while True:
             # Try to match patterns in current buffer.
@@ -295,7 +299,7 @@ class AsyncSpawn:
 
             # Check timeout.
             if deadline is not None:
-                remaining = deadline - asyncio.get_event_loop().time()
+                remaining = deadline - asyncio.get_running_loop().time()
                 if remaining <= 0:
                     return self._on_timeout(incoming, patterns)
             else:
@@ -308,7 +312,7 @@ class AsyncSpawn:
                     incoming += chunk
                     continue
             except asyncio.TimeoutError:
-                if deadline is not None and asyncio.get_event_loop().time() >= deadline:
+                if deadline is not None and asyncio.get_running_loop().time() >= deadline:
                     return self._on_timeout(incoming, patterns)
                 continue
             except EOFError:
@@ -377,8 +381,8 @@ class AsyncSpawn:
 
         echo_patterns = [sent + "\r\n", sent + "\n"]
 
-        deadline = asyncio.get_event_loop().time() + 0.5
-        while asyncio.get_event_loop().time() < deadline:
+        deadline = asyncio.get_running_loop().time() + 0.5
+        while asyncio.get_running_loop().time() < deadline:
             buf_text = "".join(self._buffer)
             for echo in echo_patterns:
                 if buf_text.startswith(echo):
@@ -391,7 +395,7 @@ class AsyncSpawn:
             if len(buf_text) > len(echo_patterns[0]) + 10:
                 return
 
-            remaining = deadline - asyncio.get_event_loop().time()
+            remaining = deadline - asyncio.get_running_loop().time()
             try:
                 chunk = await self._async_read(timeout=min(0.05, remaining))
                 if chunk:

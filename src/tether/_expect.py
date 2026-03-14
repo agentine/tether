@@ -17,10 +17,16 @@ ExpectResult = tuple[int, str, str, re.Match[str] | str | None]
 
 
 def compile_pattern(pattern: Pattern) -> CompiledPattern:
-    """Compile a single pattern into a ``CompiledPattern``."""
-    if pattern is EOF_TYPE:
+    """Compile a single pattern into a ``CompiledPattern``.
+
+    Accepts both the sentinel types (``EOF_TYPE``, ``TIMEOUT_TYPE``) and
+    the exception classes (``tether._errors.EOF``, ``tether._errors.Timeout``)
+    so that ``import tether.compat as pexpect; child.expect(pexpect.EOF)``
+    works correctly.
+    """
+    if pattern is EOF_TYPE or pattern is EOFExc:
         return CompiledPattern(raw=pattern, regex=None, is_eof=True, is_timeout=False)
-    if pattern is TIMEOUT_TYPE:
+    if pattern is TIMEOUT_TYPE or pattern is TimeoutExc:
         return CompiledPattern(raw=pattern, regex=None, is_eof=False, is_timeout=True)
     if isinstance(pattern, re.Pattern):
         return CompiledPattern(raw=pattern, regex=pattern, is_eof=False, is_timeout=False)
